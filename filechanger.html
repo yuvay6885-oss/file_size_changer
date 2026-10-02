@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Universal File Size Controller</title>
+  <link rel="stylesheet" href="filechanger.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
+  <script src="filechanger.js" defer></script>
+</head>
+<body>
+  <main class="card">
+    <header>
+      <h1>Universal File Size Controller</h1>
+      <p class="muted">Reduce or increase the size of images, optimize PDFs, or GZIP other files. Everything runs in your browser; nothing is uploaded.</p>
+    </header>
+
+    <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="Choose a file or drop it here">
+      <p><strong>Drop a file here</strong> or click to browse</p>
+      <p class="muted small">JPEG, PNG, WebP, PDF, or any other file</p>
+      <input id="fileInput" type="file" hidden>
+    </div>
+
+    <section id="fileInfo" class="info" hidden aria-live="polite">
+      <dl>
+        <div><dt>Name</dt><dd id="infoName"></dd></div>
+        <div><dt>Type</dt><dd id="infoType"></dd></div>
+        <div><dt>Original size</dt><dd id="infoSize"></dd></div>
+      </dl>
+    </section>
+
+    <form id="controls" class="controls" novalidate>
+      <div class="field">
+        <label for="targetValue">Target size</label>
+        <div class="row">
+          <input id="targetValue" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 200" required>
+          <select id="targetUnit" aria-label="Target size unit">
+            <option value="KB">KB</option>
+            <option value="MB">MB</option>
+          </select>
+        </div>
+      </div>
+
+      <fieldset class="field">
+        <legend>Operation</legend>
+        <label class="radio"><input type="radio" name="mode" value="auto" checked> Automatic</label>
+        <label class="radio"><input type="radio" name="mode" value="reduce"> Reduce</label>
+        <label class="radio"><input type="radio" name="mode" value="increase"> Increase</label>
+        <label class="radio"><input type="radio" name="mode" value="exact"> Exact size (images and PDFs)</label>
+      </fieldset>
+
+      <label class="radio"><input type="checkbox" id="rasterOpt" checked> PDFs: if the target isn't reached, convert pages to compressed images (text becomes non-selectable)</label>
+
+      <button id="processBtn" class="btn" type="submit" disabled>Process File</button>
+    </form>
+
+    <div id="loader" class="loader" hidden role="status"><span class="spinner" aria-hidden="true"></span> <span id="loaderText">Processing…</span></div>
+    <div id="message" class="message" role="alert" hidden></div>
+
+    <section id="result" hidden aria-live="polite">
+      <h2>Result</h2>
+      <dl class="stats">
+        <div><dt>Original</dt><dd id="statOriginal"></dd></div>
+        <div><dt>Target</dt><dd id="statTarget"></dd></div>
+        <div><dt>Output</dt><dd id="statOutput"></dd></div>
+        <div><dt>Change</dt><dd id="statChange"></dd></div>
+      </dl>
+      <div id="previews" class="previews" hidden>
+        <figure><figcaption>Original</figcaption><img id="origImg" alt="Original image preview"></figure>
+        <figure><figcaption>Processed</figcaption><img id="procImg" alt="Processed image preview"></figure>
+      </div>
+      <a id="downloadLink" class="btn" hidden>Download</a>
+    </section>
+  </main>
+</body>
+</html>
